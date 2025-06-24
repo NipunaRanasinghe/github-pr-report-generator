@@ -1,0 +1,55 @@
+name: Fetch Merged PRs
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'GitHub username to filter PRs'
+        required: true
+      since:
+        description: 'Start date (e.g. 2024-01-01)'
+        required: true
+
+jobs:
+  fetch-prs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch merged PRs and write to file
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          USERNAME: ${{ github.event.inputs.username }}
+          SINCE: ${{ github.event.inputs.since }}
+        run: |
+          REPOS=(
+            "ballerina-platform/ballerina-lang"
+            "ballerina-platform/module-ballerinax-googleapis.sheets"
+            "wso2/product-ballerina-integrator"
+            # Add more repos here
+          )
+
+          echo "# Merged PRs by $USERNAME since $SINCE" > merged_prs.md
+          echo "" >> merged_prs.md
+
+          for repo in "${REPOS[@]}"; do
+            echo "### $repo" >> merged_prs.md
+
+            gh pr list \
+              --repo "$repo" \
+              --author "$USERNAME" \
+              --state merged \
+              --json title,url,mergedAt \
+              --jq '.[] | select(.mergedAt >= "'$SINCE'") | "- \(.title) [#link](\(.url))"' \
+              >> merged_prs.md
+
+            echo "" >> merged_prs.md
+          done
+
+      - name: Upload merged_prs.md
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-prs
+          path: merged_prs.md
