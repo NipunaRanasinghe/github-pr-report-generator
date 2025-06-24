@@ -33,7 +33,7 @@ jobs:
             "ballerina-platform/ballerina-library"
             "ballerina-platform/module-ballerinax-mssql"
             "ballerina-platform/module-ballerinax-mysql"
-            "ballerina-platform/module-ballerinax-http"
+            "ballerina-platform/module-ballerina-http"
             "ballerina-platform/openapi-connectors"
             "wso2/product-ballerina-integrator"
             "wso2/integration-samples"
@@ -46,13 +46,22 @@ jobs:
             echo "### $repo" >> merged_prs.md
 
             gh pr list \
-              --repo "$repo" \
-              --author "$USERNAME" \
-              --state merged \
-              --json title,url,mergedAt \
-              --jq '.[] | select(.mergedAt >= "'$SINCE'") | "- \(.title) [#link](\(.url))"' \
-              >> merged_prs.md
-
+            --repo "$repo" \
+            --author "$USERNAME" \
+            --state merged \
+            --json title,url,mergedAt \
+            --jq '.[] | select(.mergedAt >= "'$SINCE'") | "- ✅ \(.title) [#link](\(.url))"' \
+            >> merged_prs.md
+          
+            # Open PRs
+            gh pr list \
+            --repo "$repo" \
+            --author "$USERNAME" \
+            --state open \
+            --json title,url,createdAt \
+            --jq '.[] | "- 🟡 \(.title) [#link](\(.url))"' \
+            >> merged_prs.md
+          
             echo "" >> merged_prs.md
           done
 
