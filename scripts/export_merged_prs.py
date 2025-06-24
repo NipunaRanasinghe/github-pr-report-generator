@@ -4,7 +4,7 @@ import os
 
 # --- CONFIGURATION ---
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # must be set as env var or secret
-ORGS = ["ballerina-platform", "wso2", "your-org-name"]  # ✅ your orgs here
+ORGS = ["ballerina-platform", "wso2", "wso2-enterprise"]  # ✅ your orgs here
 DAYS = 180  # last 6 months
 
 HEADERS = {

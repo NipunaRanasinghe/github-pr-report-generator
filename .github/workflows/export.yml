@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}  # Use a PAT
         run: |
           pip install requests
-          python export_merged_prs.py
+          python scripts/export_merged_prs.py
 
       - name: Upload merged PRs file
         uses: actions/upload-artifact@v4
