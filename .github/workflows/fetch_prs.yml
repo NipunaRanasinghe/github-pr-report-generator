@@ -25,10 +25,18 @@ jobs:
           SINCE: ${{ github.event.inputs.since }}
         run: |
           REPOS=(
+            "wso2-enterprise/vscode-extensions"
+            "ballerina-platform/ballerina-dev-tools"
+            "ballerina-platform/ballerina-language-server"
             "ballerina-platform/ballerina-lang"
-            "ballerina-platform/module-ballerinax-googleapis.sheets"
+            "ballerina-platform/ballerina-distribution"
+            "ballerina-platform/ballerina-library"
+            "ballerina-platform/module-ballerinax-mssql"
+            "ballerina-platform/module-ballerinax-mysql"
+            "ballerina-platform/module-ballerinax-http"
+            "ballerina-platform/openapi-connectors"
             "wso2/product-ballerina-integrator"
-            # Add more repos here
+            "wso2/integration-samples"
           )
 
           echo "# Merged PRs by $USERNAME since $SINCE" > merged_prs.md
