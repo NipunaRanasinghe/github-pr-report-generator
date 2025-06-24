@@ -1,0 +1,29 @@
+name: Export Merged PRs from Multiple Orgs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies and run script
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}  # Use a PAT
+        run: |
+          pip install requests
+          python export_merged_prs.py
+
+      - name: Upload merged PRs file
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-prs
+          path: merged_prs.txt
